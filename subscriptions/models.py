@@ -171,6 +171,7 @@ class PaymentCurrency(models.Model):
     )
     positive_sign = models.CharField(
         max_length=1,
+        null=True,
         default="",
         help_text="The symbol to use for the positive sign."
     )

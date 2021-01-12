@@ -233,10 +233,10 @@ CURRENCY = {
     },
     'en_ae': {
         'currency_symbol': 'AED',
-        'int_curr_symbol': 'PHP',
+        'int_curr_symbol': 'AED',
         'p_cs_precedes': True,
         'n_cs_precedes': True,
-        'p_sep_by_space': False,
+        'p_sep_by_space': True,
         'n_sep_by_space': False,
         'mon_decimal_point': '.',
         'mon_thousands_sep': ',',
