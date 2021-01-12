@@ -30,3 +30,4 @@ sandbox/*.sqlite3
 
 # Node Modules
 /node_modules/*
+.vscode/launch.json

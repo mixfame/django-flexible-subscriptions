@@ -124,7 +124,7 @@ class PaymentCurrency(models.Model):
         ('4', 'The sign should immediately follow the value.'),
     ]
 
-    locale = models.CharField(max_length=4)
+    locale = models.CharField(max_length=5)
     currency_symbol = models.CharField(
         max_length=8,
         help_text="The symbol used for this currency."
