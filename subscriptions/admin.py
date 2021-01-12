@@ -61,7 +61,37 @@ class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
 
 
+class PlanListDetailInline(admin.StackedInline):
+    model = models.PlanListDetail
+    fields = (
+        'plan',
+        'html_content',
+        'subscribe_button_text',
+        'order',
+    )
+    extra = 1
+
+
+class PlanListAdmin(admin.ModelAdmin):
+    """Admin class for plan lists"""
+    fields = (
+        'title',
+        'slug',
+        'subtitle',
+        'header',
+        'footer',
+        'active',
+    )
+    inlines = [PlanListDetailInline]
+    list_display = (
+        'title',
+        'slug',
+        'active',
+    )
+
+
 if SETTINGS['enable_admin']:
+    admin.site.register(models.PlanList, PlanListAdmin)
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
