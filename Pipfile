@@ -5,13 +5,12 @@ verify_ssl = true
 
 [packages]
 django = "*"  # https://github.com/django/django
-
+django-debug-toolbar = "*"
 
 [dev-packages]
 # Django (for testing)
 # ------------------------------------------------------------------------------
 django-debug-toolbar = "*"  # https://github.com/jazzband/django-debug-toolbar
-
 # Code quality
 # ------------------------------------------------------------------------------
 coverage = "*"  # https://github.com/nedbat/coveragepy
@@ -19,21 +18,19 @@ pycodestyle = "*"  # https://github.com/PyCQA/pycodestyle
 pylint = "*"  # https://github.com/PyCQA/pylint/
 pylint-django = "*"  # https://github.com/PyCQA/pylint-django
 restructuredtext-lint = "*"  # https://github.com/twolfson/restructuredtext-lint
-
 # Testing
 # ------------------------------------------------------------------------------
 factory_boy = "*"  # https://github.com/FactoryBoy/factory_boy
 pytest = "*"  # https://github.com/pytest-dev/pytest
 pytest-cov = "*"  # https://github.com/pytest-dev/pytest-cov
 pytest-django = "*"  # https://pytest-django.readthedocs.io/en/latest/
-
 # Package Documentation
 # ------------------------------------------------------------------------------
 sphinx = "*"  # https://github.com/sphinx-doc/sphinx
 sphinx_rtd_theme = "*"  # https://github.com/rtfd/sphinx_rtd_theme
-
 # Package Distribution
 # ------------------------------------------------------------------------------
 setuptools = "*"  # https://pypi.org/project/setuptools/#description
 wheel = "*"  # https://pypi.org/project/wheel/
 twine = "*"  # https://github.com/pypa/twine
+autopep8 = "*"

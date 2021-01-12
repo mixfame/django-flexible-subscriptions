@@ -64,3 +64,4 @@ if SETTINGS['enable_admin']:
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
+    admin.site.register(models.PaymentCurrency)

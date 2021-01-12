@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     # External Apps
     'debug_toolbar',
     # Local Apps
-    'subscriptions',
+    'subscriptions.apps.FlexibleSubscriptionsConfig'
 ]
 
 # DJANGO MIDDLEWARE

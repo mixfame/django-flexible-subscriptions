@@ -6,8 +6,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.fields import CharField
 from django.utils.translation import gettext_lazy as _
-
 
 # Convenience references for units for plan recurrence billing
 # ----------------------------------------------------------------------------
@@ -110,6 +110,93 @@ class SubscriptionPlan(models.Model):
             )
 
         return ', '.join(tag.tag for tag in self.tags.all()[:3])
+
+
+class PaymentCurrency(models.Model):
+    """PaymentCurrency
+    custom model for storing and managing currencies
+    """
+    SIGN_POSITION_CHOICES = [
+        ('0', 'Currency and value are surrounded by parentheses.'),
+        ('1', 'The sign should precede the value and currency symbol.'),
+        ('2', 'The sign should follow the value and currency symbol.'),
+        ('3', 'The sign should immediately precede the value.'),
+        ('4', 'The sign should immediately follow the value.'),
+    ]
+
+    locale = models.CharField(max_length=4)
+    currency_symbol = models.CharField(
+        max_length=8,
+        help_text="The symbol used for this currency."
+    )
+    int_curr_symbol = models.CharField(
+        max_length=8,
+        help_text="The symbol used for this currency for international formatting."
+    )
+    p_cs_precedes = models.BooleanField(
+        default=True,
+        help_text="Whether the currency symbol precedes positive values"
+    )
+    n_cs_precedes = models.BooleanField(
+        default=True,
+        help_text="Whether the currency symbol precedes negative values."
+    )
+    p_sep_by_space = models.BooleanField(
+        default=True,
+        help_text="Whether the currency symbol is separated from positive values by a space."
+    )
+    n_sep_by_space = models.BooleanField(
+        default=True,
+        help_text="Whether the currency symbol is separated from negative values by a space."
+    )
+    mon_decimal_point = models.CharField(
+        max_length=1,
+        help_text="The character used for decimal points."
+    )
+    mon_thousands_sep = models.CharField(
+        max_length=1,
+        help_text="The character used for separating groups of numbers."
+    )
+    mon_grouping = models.PositiveSmallIntegerField(
+        default=3,
+        help_text="The number of digits per groups."
+    )
+    frac_digits = models.PositiveSmallIntegerField(
+        default=2,
+        help_text="The number of digits following the decimal place. Use 0 if this is a non-decimal currency."
+    )
+    int_frac_digits = models.PositiveSmallIntegerField(
+        default=2,
+        help_text="The number of digits following the decimal place for international formatting. Use 0 if this is a non-decimal currency."
+    )
+    positive_sign = models.CharField(
+        max_length=1,
+        default="",
+        help_text="The symbol to use for the positive sign."
+    )
+    negative_sign = models.CharField(
+        max_length=1,
+        default="-",
+        help_text="The symbol to use for the negative sign."
+    )
+    p_sign_posn = models.CharField(
+        max_length=1,
+        choices=SIGN_POSITION_CHOICES,
+        default=SIGN_POSITION_CHOICES[0][0],
+        help_text="How the positive sign should be positioned relative to the currency symbol and value."
+    )
+    n_sign_posn = models.CharField(
+        max_length=1,
+        choices=SIGN_POSITION_CHOICES,
+        default=SIGN_POSITION_CHOICES[0][0],
+        help_text="How the negative sign should be positioned relative to the currency symbol and value."
+    )
+
+    class Meta:
+        verbose_name_plural = "Payment Currencies"
+
+    def __str__(self):
+        return self.locale
 
 
 class PlanCost(models.Model):
