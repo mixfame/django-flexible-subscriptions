@@ -230,6 +230,12 @@ class PlanCost(models.Model):
         default=MONTH,
         max_length=1,
     )
+    currency = models.ForeignKey(
+        "subscriptions.PaymentCurrency",
+        verbose_name=_("currency"),
+        on_delete=models.CASCADE,
+        null=True
+    )
     cost = models.DecimalField(
         blank=True,
         decimal_places=4,
