@@ -331,7 +331,10 @@ class PlanCost(models.Model):
     @property
     def cost_as_float(self):
         """returns a float interpretation of cost"""
-        return float(self.cost)
+        if self.cost:
+            return float(self.cost)
+
+        return float(0.0)
 
 
 class UserSubscription(models.Model):
