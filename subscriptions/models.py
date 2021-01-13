@@ -328,6 +328,11 @@ class PlanCost(models.Model):
 
         return current + delta
 
+    @property
+    def cost_as_float(self):
+        """returns a float interpretation of cost"""
+        return float(self.cost)
+
 
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
