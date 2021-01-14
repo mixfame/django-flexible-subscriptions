@@ -245,6 +245,14 @@ class PlanCost(models.Model):
         null=True,
     )
 
+    def __str__(self):
+        return '{} @ {} {} {}'.format(
+            self.plan.plan_name,
+            self.currency.currency_symbol,
+            self.cost_as_float,
+            self.display_billing_frequency_text
+        )
+
     class Meta:
         ordering = ('recurrence_unit', 'recurrence_period', 'cost',)
 
@@ -429,6 +437,14 @@ class SubscriptionTransaction(models.Model):
         max_digits=19,
         null=True,
     )
+
+    def __str__(self):
+        return '{} for {} @ {} {}'.format(
+            self.user,
+            self.subscription.plan.plan_name,
+            self.subscription.currency.currency_symbol,
+            self.amount,
+        )
 
     class Meta:
         ordering = ('date_transaction', 'user',)

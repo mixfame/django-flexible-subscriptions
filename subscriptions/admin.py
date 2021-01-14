@@ -1,5 +1,6 @@
 """Admin views for the Flexible Subscriptions app."""
 from django.contrib import admin
+from rangefilter.filter import DateRangeFilter
 
 from subscriptions import models
 from subscriptions.conf import SETTINGS
@@ -57,13 +58,31 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         'active',
         'cancelled',
     )
+    list_filter = (
+        'user',
+        'subscription',
+        ('date_billing_last', DateRangeFilter),
+        ('date_billing_next', DateRangeFilter),
+    )
 
 
 class TransactionAdmin(admin.ModelAdmin):
     """Admin class for the SubscriptionTransaction model."""
+    list_display = (
+        'user',
+        'subscription',
+        'date_transaction',
+        'amount',
+    )
+    list_filter = (
+        'user',
+        'subscription',
+        ('date_transaction', DateRangeFilter),
+    )
 
 
 class PlanListDetailInline(admin.StackedInline):
+    """Admin class for the PlanListDetail model."""
     model = models.PlanListDetail
     fields = (
         'plan',

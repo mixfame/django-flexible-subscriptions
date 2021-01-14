@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # External Apps
     'debug_toolbar',
+    'rangefilter',
     # Local Apps
     'subscriptions.apps.FlexibleSubscriptionsConfig'
 ]
