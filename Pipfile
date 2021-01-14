@@ -6,6 +6,7 @@ verify_ssl = true
 [packages]
 django = "*"  # https://github.com/django/django
 django-debug-toolbar = "*"
+django-admin-rangefilter = "*"
 
 [dev-packages]
 # Django (for testing)
