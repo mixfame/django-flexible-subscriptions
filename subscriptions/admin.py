@@ -41,6 +41,7 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     """Admin class for the UserSubscription model."""
     fields = (
         'user',
+        'subscription',
         'date_billing_start',
         'date_billing_end',
         'date_billing_last',
