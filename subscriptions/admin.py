@@ -50,6 +50,7 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
     )
     list_display = (
         'user',
+        'subscription',
         'date_billing_last',
         'date_billing_next',
         'active',
