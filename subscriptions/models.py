@@ -245,6 +245,8 @@ class PlanCost(models.Model):
         null=True,
     )
 
+    active = models.BooleanField(default=True)
+
     def __str__(self):
         return '{} @ {} {} {}'.format(
             self.plan.plan_name,
