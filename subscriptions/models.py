@@ -248,7 +248,7 @@ class PlanCost(models.Model):
     def __str__(self):
         return '{} @ {} {} {}'.format(
             self.plan.plan_name,
-            self.currency,
+            self.currency.currency_symbol,
             self.cost_as_float,
             self.display_billing_frequency_text
         )
