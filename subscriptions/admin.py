@@ -15,6 +15,7 @@ class PlanCostInline(admin.TabularInline):
         'recurrence_unit',
         'currency',
         'cost',
+        'active',
     )
     extra = 0
 
