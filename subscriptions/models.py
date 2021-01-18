@@ -518,5 +518,5 @@ class PlanListDetail(models.Model):
 
     def __str__(self):
         return 'Plan List {} - {}'.format(
-            self.plan_list, self.plan.plan_name
+            self.plan_list, self.plan
         )
