@@ -60,10 +60,16 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         'cancelled',
     )
     list_filter = (
-        'user',
+        'active',
+        'cancelled',
         'subscription',
         ('date_billing_last', DateRangeFilter),
         ('date_billing_next', DateRangeFilter),
+    )
+    search_fields = (
+        'user',
+        'subscription',
+
     )
 
 
@@ -76,7 +82,6 @@ class TransactionAdmin(admin.ModelAdmin):
         'amount',
     )
     list_filter = (
-        'user',
         'subscription',
         ('date_transaction', DateRangeFilter),
     )
@@ -112,9 +117,17 @@ class PlanListAdmin(admin.ModelAdmin):
     )
 
 
+class PaymentCurrencyAdmin(admin.ModelAdmin):
+    """Admin class for payment currencies"""
+    list_display = (
+        'locale',
+        'currency_symbol',
+    )
+
+
 if SETTINGS['enable_admin']:
     admin.site.register(models.PlanList, PlanListAdmin)
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
-    admin.site.register(models.PaymentCurrency)
+    admin.site.register(models.PaymentCurrency, PaymentCurrencyAdmin)
