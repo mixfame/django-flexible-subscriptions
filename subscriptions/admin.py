@@ -67,9 +67,8 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         ('date_billing_next', DateRangeFilter),
     )
     search_fields = (
-        'user',
-        'subscription',
-
+        'user__first_name',
+        'user__email',
     )
 
 
@@ -84,6 +83,10 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = (
         'subscription',
         ('date_transaction', DateRangeFilter),
+    )
+    search_fields = (
+        'user__first_name',
+        'user__email',
     )
 
 
