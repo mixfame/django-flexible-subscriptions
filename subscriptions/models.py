@@ -197,7 +197,7 @@ class PaymentCurrency(models.Model):
         verbose_name_plural = "Payment Currencies"
 
     def __str__(self):
-        return self.locale
+        return self.int_curr_symbol
 
 
 class PlanCost(models.Model):
