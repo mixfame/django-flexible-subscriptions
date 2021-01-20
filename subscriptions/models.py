@@ -447,7 +447,11 @@ class SubscriptionTransaction(models.Model):
 
     # when creating an object and setting the value,
     # SubscriptionTransaction(transaction_type="P/R")
-    transaction_type = models.CharField(default="P", max_length=2)
+    transaction_type = models.CharField(
+        default="P",
+        max_length=2,
+        choices=TRANSACTION_TYPES
+    )
 
     def __str__(self):
         return '{} for {} @ {} {}'.format(
