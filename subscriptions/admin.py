@@ -79,9 +79,11 @@ class TransactionAdmin(admin.ModelAdmin):
         'subscription',
         'date_transaction',
         'amount',
+        'transaction_type',
     )
     list_filter = (
         'subscription',
+        'transaction_type',
         ('date_transaction', DateRangeFilter),
     )
     search_fields = (
