@@ -407,6 +407,11 @@ class UserSubscription(models.Model):
 
 
 class SubscriptionTransaction(models.Model):
+    TRANSACTION_TYPES = [
+        ('P', 'Payment'),
+        ('R', 'Refund'),
+    ]
+
     """Details for a subscription plan billing."""
     id = models.UUIDField(
         default=uuid4,
@@ -439,6 +444,10 @@ class SubscriptionTransaction(models.Model):
         max_digits=19,
         null=True,
     )
+
+    # when creating an object and setting the value,
+    # SubscriptionTransaction(transaction_type="P/R")
+    transaction_type = models.CharField(default="P", max_length=2)
 
     def __str__(self):
         return '{} for {} @ {} {}'.format(
