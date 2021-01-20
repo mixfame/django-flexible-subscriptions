@@ -402,6 +402,12 @@ class UserSubscription(models.Model):
         help_text=_('whether this subscription is cancelled or not'),
     )
 
+    def __str__(self) -> str:
+        return '{} for {}'.format(
+            self.user,
+            self.subscription.plan
+        )
+
     class Meta:
         ordering = ('user', 'date_billing_start',)
 
