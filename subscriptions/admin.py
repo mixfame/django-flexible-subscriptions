@@ -100,6 +100,7 @@ class PlanListDetailInline(admin.StackedInline):
         'html_content',
         'subscribe_button_text',
         'order',
+        'active'
     )
     extra = 1
 

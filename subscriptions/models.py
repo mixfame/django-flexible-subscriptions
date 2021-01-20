@@ -537,6 +537,8 @@ class PlanListDetail(models.Model):
         help_text=_('Order to display plan in (lower numbers displayed first)'),
     )
 
+    active = models.BooleanField(default=True)
+
     def __str__(self):
         return 'Plan List {} - {}'.format(
             self.plan_list, self.plan
