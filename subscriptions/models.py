@@ -413,9 +413,13 @@ class UserSubscription(models.Model):
 
 
 class SubscriptionTransaction(models.Model):
+    PAYMENT = 'P'
+    REFUND = 'R'
+    CANCEL = 'C'
     TRANSACTION_TYPES = [
-        ('P', 'Payment'),
-        ('R', 'Refund'),
+        (PAYMENT, 'Payment'),
+        (REFUND, 'Refund'),
+        (CANCEL, 'Cancellation'),
     ]
 
     """Details for a subscription plan billing."""
