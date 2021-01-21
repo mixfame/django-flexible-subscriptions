@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models.fields import CharField
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 # Convenience references for units for plan recurrence billing
@@ -347,6 +347,19 @@ class PlanCost(models.Model):
         return float(0.0)
 
 
+class UserSubscriptionManager(models.Manager):
+    """Model manager for UserSubscription"""
+
+    def to_charge(self):
+        """selects UserSubscriptions that are due for billing"""
+        now = timezone.now()
+        return self.filter(
+            active=True,
+            cancelled=False,
+            date_billing_next__lte=now
+        )
+
+
 class UserSubscription(models.Model):
     """Details of a user's specific subscription."""
     id = models.UUIDField(
@@ -401,6 +414,8 @@ class UserSubscription(models.Model):
         default=False,
         help_text=_('whether this subscription is cancelled or not'),
     )
+
+    objects = UserSubscriptionManager()
 
     def __str__(self) -> str:
         return '{} for {}'.format(
