@@ -310,24 +310,25 @@ class PlanCost(models.Model):
             Returns:
                 datetime: The next time billing will be due.
         """
-        if self.recurrence_unit == SECOND:
+        recurrence_unit = int(self.recurrence_unit)
+        if recurrence_unit == SECOND:
             delta = timedelta(seconds=self.recurrence_period)
-        elif self.recurrence_unit == MINUTE:
+        elif recurrence_unit == MINUTE:
             delta = timedelta(minutes=self.recurrence_period)
-        elif self.recurrence_unit == HOUR:
+        elif recurrence_unit == HOUR:
             delta = timedelta(hours=self.recurrence_period)
-        elif self.recurrence_unit == DAY:
+        elif recurrence_unit == DAY:
             delta = timedelta(days=self.recurrence_period)
-        elif self.recurrence_unit == WEEK:
+        elif recurrence_unit == WEEK:
             delta = timedelta(weeks=self.recurrence_period)
-        elif self.recurrence_unit == MONTH:
+        elif recurrence_unit == MONTH:
             # Adds the average number of days per month as per:
             # http://en.wikipedia.org/wiki/Month#Julian_and_Gregorian_calendars
             # This handle any issues with months < 31 days and leap years
             delta = timedelta(
                 days=30.4368 * self.recurrence_period
             )
-        elif self.recurrence_unit == YEAR:
+        elif recurrence_unit == YEAR:
             # Adds the average number of days per year as per:
             # http://en.wikipedia.org/wiki/Year#Calendar_year
             # This handle any issues with leap years
