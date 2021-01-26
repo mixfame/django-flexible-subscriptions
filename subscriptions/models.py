@@ -12,14 +12,14 @@ from django.utils.translation import gettext_lazy as _
 
 # Convenience references for units for plan recurrence billing
 # ----------------------------------------------------------------------------
-ONCE = '0'
-SECOND = '1'
-MINUTE = '2'
-HOUR = '3'
-DAY = '4'
-WEEK = '5'
-MONTH = '6'
-YEAR = '7'
+ONCE = 0
+SECOND = 1
+MINUTE = 2
+HOUR = 3
+DAY = 4
+WEEK = 5
+MONTH = 6
+YEAR = 7
 RECURRENCE_UNIT_CHOICES = (
     (ONCE, 'once'),
     (SECOND, 'second'),
@@ -273,7 +273,7 @@ class PlanCost(models.Model):
             YEAR: 'per year',
         }
 
-        return conversion[self.recurrence_unit]
+        return conversion[int(self.recurrence_unit)]
 
     @property
     def display_billing_frequency_text(self):
@@ -293,10 +293,11 @@ class PlanCost(models.Model):
             return conversion[ONCE]
 
         if self.recurrence_period == 1:
-            return conversion[self.recurrence_unit]['singular']
+            return conversion[int(self.recurrence_unit)]['singular']
 
         return 'every {} {}'.format(
-            self.recurrence_period, conversion[self.recurrence_unit]['plural']
+            self.recurrence_period,
+            conversion[int(self.recurrence_unit)]['plural']
         )
 
     def next_billing_datetime(self, current):
