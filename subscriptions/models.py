@@ -11,14 +11,14 @@ from django.utils.translation import gettext_lazy as _
 
 # Convenience references for units for plan recurrence billing
 # ----------------------------------------------------------------------------
-ONCE = 0
-SECOND = 1
-MINUTE = 2
-HOUR = 3
-DAY = 4
-WEEK = 5
-MONTH = 6
-YEAR = 7
+ONCE = '0'
+SECOND = '1'
+MINUTE = '2'
+HOUR = '3'
+DAY = '4'
+WEEK = '5'
+MONTH = '6'
+YEAR = '7'
 RECURRENCE_UNIT_CHOICES = (
     (ONCE, 'once'),
     (SECOND, 'second'),
@@ -272,7 +272,7 @@ class PlanCost(models.Model):
             YEAR: 'per year',
         }
 
-        return conversion[int(self.recurrence_unit)]
+        return conversion[self.recurrence_unit]
 
     @property
     def display_billing_frequency_text(self):
@@ -292,11 +292,11 @@ class PlanCost(models.Model):
             return conversion[ONCE]
 
         if self.recurrence_period == 1:
-            return conversion[int(self.recurrence_unit)]['singular']
+            return conversion[self.recurrence_unit]['singular']
 
         return 'every {} {}'.format(
             self.recurrence_period,
-            conversion[int(self.recurrence_unit)]['plural']
+            conversion[self.recurrence_unit]['plural']
         )
 
     def next_billing_datetime(self, current):
@@ -309,25 +309,24 @@ class PlanCost(models.Model):
             Returns:
                 datetime: The next time billing will be due.
         """
-        recurrence_unit = int(self.recurrence_unit)
-        if recurrence_unit == SECOND:
+        if self.recurrence_unit == SECOND:
             delta = timedelta(seconds=self.recurrence_period)
-        elif recurrence_unit == MINUTE:
+        elif self.recurrence_unit == MINUTE:
             delta = timedelta(minutes=self.recurrence_period)
-        elif recurrence_unit == HOUR:
+        elif self.recurrence_unit == HOUR:
             delta = timedelta(hours=self.recurrence_period)
-        elif recurrence_unit == DAY:
+        elif self.recurrence_unit == DAY:
             delta = timedelta(days=self.recurrence_period)
-        elif recurrence_unit == WEEK:
+        elif self.recurrence_unit == WEEK:
             delta = timedelta(weeks=self.recurrence_period)
-        elif recurrence_unit == MONTH:
+        elif self.recurrence_unit == MONTH:
             # Adds the average number of days per month as per:
             # http://en.wikipedia.org/wiki/Month#Julian_and_Gregorian_calendars
             # This handle any issues with months < 31 days and leap years
             delta = timedelta(
                 days=30.4368 * self.recurrence_period
             )
-        elif recurrence_unit == YEAR:
+        elif self.recurrence_unit == YEAR:
             # Adds the average number of days per year as per:
             # http://en.wikipedia.org/wiki/Year#Calendar_year
             # This handle any issues with leap years
@@ -355,11 +354,13 @@ class UserSubscriptionManager(models.Manager):
     def to_charge(self):
         """selects UserSubscriptions that are due for billing"""
         now = timezone.now()
-        return self.filter(
+        queryset = self.filter(
             active=True,
             cancelled=False,
             date_billing_next__lte=now
-        )
+        ).values_list("id", flat=True)
+
+        return list(queryset)
 
 
 class UserSubscription(models.Model):
