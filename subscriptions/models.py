@@ -1,7 +1,6 @@
 """Models for the Flexible Subscriptions app."""
 from datetime import timedelta
-from typing import List
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -351,16 +350,14 @@ class PlanCost(models.Model):
 class UserSubscriptionManager(models.Manager):
     """Model manager for UserSubscription"""
 
-    def to_charge(self) -> List[UUID]:
+    def to_charge(self):
         """selects UserSubscriptions that are due for billing"""
         now = timezone.now()
-        queryset = self.filter(
+        return self.filter(
             active=True,
             cancelled=False,
             date_billing_next__lte=now
-        ).values_list("id", flat=True)
-
-        return list(queryset)
+        )
 
 
 class UserSubscription(models.Model):
