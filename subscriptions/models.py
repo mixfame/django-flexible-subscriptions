@@ -364,6 +364,16 @@ class UserSubscriptionManager(models.Manager):
 
 
 class UserSubscription(models.Model):
+    RUNNING = 'R'
+    RETRYING = 'T'
+    FAILED = 'F'
+
+    RENEWAL_CHOICES = (
+        (RUNNING, 'Running'),
+        (RETRYING, 'Retrying subscription renewal'),
+        (FAILED, 'Failed')
+    )
+
     """Details of a user's specific subscription."""
     id = models.UUIDField(
         default=uuid4,
@@ -416,6 +426,12 @@ class UserSubscription(models.Model):
     cancelled = models.BooleanField(
         default=False,
         help_text=_('whether this subscription is cancelled or not'),
+    )
+
+    renewal_status = models.CharField(
+        max_length=1,
+        default=RUNNING,
+        choices=RENEWAL_CHOICES
     )
 
     objects = UserSubscriptionManager()
@@ -474,7 +490,7 @@ class SubscriptionTransaction(models.Model):
     )
 
     # when creating an object and setting the value,
-    # SubscriptionTransaction(transaction_type="P/R")
+    # SubscriptionTransaction(transaction_type=SubscriptionTransaction.PAYMENT)
     transaction_type = models.CharField(
         default="P",
         max_length=2,
