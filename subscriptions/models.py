@@ -423,6 +423,8 @@ class UserSubscriptionManager(models.Manager):
 
 
 class UserSubscription(models.Model):
+    """Details of a user's specific subscription."""
+
     RUNNING = 'R'
     RETRYING = 'T'
     FAILED = 'F'
@@ -433,7 +435,6 @@ class UserSubscription(models.Model):
         (FAILED, 'Failed')
     )
 
-    """Details of a user's specific subscription."""
     id = models.UUIDField(
         default=uuid4,
         editable=False,
@@ -526,7 +527,7 @@ class UserSubscription(models.Model):
         if not self.retry:
             return False
 
-        return self.transaction_ago <= self.retry.retry_offset
+        return self.transaction_ago >= self.retry.retry_offset
 
     def __str__(self) -> str:
         return '{} for {}'.format(
