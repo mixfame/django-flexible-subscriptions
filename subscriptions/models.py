@@ -50,6 +50,8 @@ class PaymentRetry(models.Model):
         help_text="Number of days in which the payment is to be retried"
     )
 
+    objects = RetryManager()
+
     @property
     def pretty_offset(self):
         if self.retry_offset == 0:
