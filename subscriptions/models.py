@@ -351,6 +351,17 @@ class PlanCost(models.Model):
 class UserSubscriptionManager(models.Manager):
     """Model manager for UserSubscription"""
 
+    def failed_renewals(self):
+        """
+        compiles a set of usersubscriptions with renewal_status=retry
+
+        returns {
+            user_subscription: uuid,
+            last_payment: id
+        }
+        """
+        self.filter(renewal_status=UserSubscription.RETRYING)
+
     def to_charge(self):
         """selects UserSubscriptions that are due for billing"""
         now = timezone.now()
