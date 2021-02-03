@@ -360,7 +360,11 @@ class UserSubscriptionManager(models.Manager):
             last_payment: id
         }
         """
-        self.filter(renewal_status=UserSubscription.RETRYING)
+        self.filter(
+            active=True,
+            cancelled=False,
+            renewal_status=UserSubscription.RETRYING
+        )
 
     def to_charge(self):
         """selects UserSubscriptions that are due for billing"""
