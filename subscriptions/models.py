@@ -398,7 +398,7 @@ class UserSubscriptionManager(models.Manager):
         queryset = self.filter(
             active=True,
             cancelled=False,
-            renewal_status='R'
+            renewal_status=UserSubscription.RETRYING
         )
 
         output = []
