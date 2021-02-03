@@ -50,6 +50,7 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         'date_billing_next',
         'active',
         'cancelled',
+        'renewal_status',
     )
     list_display = (
         'user',
@@ -58,11 +59,13 @@ class UserSubscriptionAdmin(admin.ModelAdmin):
         'date_billing_next',
         'active',
         'cancelled',
+        'renewal_status',
     )
     list_filter = (
         'active',
         'cancelled',
         'subscription',
+        'renewal_status',
         ('date_billing_last', DateRangeFilter),
         ('date_billing_next', DateRangeFilter),
     )
