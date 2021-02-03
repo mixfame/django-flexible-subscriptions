@@ -134,9 +134,17 @@ class PaymentCurrencyAdmin(admin.ModelAdmin):
     )
 
 
+class PaymentRetryAdmin(admin.ModelAdmin):
+    list_display = (
+        'iteration',
+        'pretty_offset',
+    )
+
+
 if SETTINGS['enable_admin']:
     admin.site.register(models.PlanList, PlanListAdmin)
     admin.site.register(models.SubscriptionPlan, SubscriptionPlanAdmin)
     admin.site.register(models.UserSubscription, UserSubscriptionAdmin)
     admin.site.register(models.SubscriptionTransaction, TransactionAdmin)
     admin.site.register(models.PaymentCurrency, PaymentCurrencyAdmin)
+    admin.site.register(models.PaymentRetry, PaymentRetryAdmin)

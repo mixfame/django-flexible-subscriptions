@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
@@ -29,6 +30,40 @@ RECURRENCE_UNIT_CHOICES = (
     (MONTH, 'month'),
     (YEAR, 'year'),
 )
+
+
+class RetryManager(models.Manager):
+    def first_try(self):
+        return self.get(iteration=1)
+
+    def next(self, current):
+        try:
+            return self.get(iteration=current+1)
+        except ObjectDoesNotExist:
+            return None
+
+
+class PaymentRetry(models.Model):
+    iteration = models.PositiveSmallIntegerField()
+
+    retry_offset = models.PositiveSmallIntegerField(
+        help_text="Number of days in which the payment is to be retried"
+    )
+
+    @property
+    def pretty_offset(self):
+        if self.retry_offset == 0:
+            return 'immediately'
+        elif self.retry_offset == 1:
+            return 'the next day'
+        else:
+            return 'in {} days'.format(self.retry_offset)
+
+    def __str__(self) -> str:
+        return self.pretty_offset
+
+    class Meta:
+        verbose_name_plural = 'Payment Retries'
 
 
 class PlanTag(models.Model):
@@ -363,10 +398,17 @@ class UserSubscriptionManager(models.Manager):
         queryset = self.filter(
             active=True,
             cancelled=False,
-            renewal_status=UserSubscription.RETRYING
+            renewal_status='R'
         )
 
-        return list(queryset.values_list('id', flat=True))
+        output = []
+
+        # determine if q is for retry based on its retry offset
+        for user_subscription in queryset.iterator():
+            if user_subscription.for_retry:
+                output.append(user_subscription.id)
+
+        return output
 
     def to_charge(self):
         """selects UserSubscriptions that are due for billing"""
@@ -452,6 +494,39 @@ class UserSubscription(models.Model):
     )
 
     objects = UserSubscriptionManager()
+
+    retry = models.ForeignKey(
+        PaymentRetry,
+        verbose_name="retry",
+        on_delete=models.CASCADE,
+        null=True,
+        default=None
+    )
+
+    @property
+    def transaction_ago(self) -> int:
+        """transaction_ago
+        calculates the days difference between self.transaction_date
+        and timezone.now
+
+        returns an int derived from diff.days
+        """
+
+        difference: timedelta = timezone.now() - self.date_billing_last
+
+        return difference.days
+
+    @property
+    def for_retry(self) -> bool:
+        """
+        if the difference is less than the attached retry in days,
+        then it's due for a retry
+        """
+
+        if not self.retry:
+            return False
+
+        return self.transaction_ago <= self.retry.retry_offset
 
     def __str__(self) -> str:
         return '{} for {}'.format(
