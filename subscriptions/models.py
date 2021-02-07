@@ -247,10 +247,11 @@ class PlanCostManager():
 
         Returns the appropriate PlanCost
         """
+        queryset = self.get_queryset()
         try:
             if not group:
                 group, _ = Group.objects.get_or_create(name="Talent")
-            return self.get(plan__group=group, cost=0)
+            return queryset.get(plan__group=group, cost=0)
         except ObjectDoesNotExist:
             return None
 
