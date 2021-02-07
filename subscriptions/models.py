@@ -237,6 +237,24 @@ class PaymentCurrency(models.Model):
         return self.int_curr_symbol
 
 
+class PlanCostManager():
+    def get_basic(self, group):
+        """
+        Returns the free plan cost for a given group
+
+        Args:
+            group (Group): Auth group, defaults to talent
+
+        Returns the appropriate PlanCost
+        """
+        try:
+            if not group:
+                group, _ = Group.objects.get_or_create(name="Talent")
+            return self.get(plan__group=group, cost=0)
+        except ObjectDoesNotExist:
+            return None
+
+
 class PlanCost(models.Model):
     """Cost and frequency of billing for a plan."""
     id = models.UUIDField(
@@ -283,6 +301,8 @@ class PlanCost(models.Model):
     )
 
     active = models.BooleanField(default=True)
+
+    objects = PlanCostManager()
 
     def __str__(self):
         return '{} @ {} {} {}'.format(
@@ -387,6 +407,15 @@ class PlanCost(models.Model):
 
 class UserSubscriptionManager(models.Manager):
     """Model manager for UserSubscription"""
+
+    def attach_subscription(self, plan_cost: PlanCost, user):
+        # attach basic to user
+        return UserSubscription.objects.create(
+            user=user,
+            subscription=plan_cost,
+            active=True,
+            date_billing_start=timezone.now()
+        )
 
     def failed_renewals(self):
         """
