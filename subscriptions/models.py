@@ -237,7 +237,9 @@ class PaymentCurrency(models.Model):
         return self.int_curr_symbol
 
 
-class PlanCostManager():
+class PlanCostManager(models.Manager):
+    """Manager for PlanCost"""
+
     def get_basic(self, group):
         """
         Returns the free plan cost for a given group
